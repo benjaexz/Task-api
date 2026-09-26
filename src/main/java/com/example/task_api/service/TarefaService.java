@@ -5,9 +5,9 @@ import com.example.task_api.dto.TarefaResponseDTO;
 import com.example.task_api.entity.Tarefa;
 import com.example.task_api.exception.ResourceNotFoundException;
 import com.example.task_api.repository.TarefaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class TarefaService {
@@ -18,10 +18,14 @@ public class TarefaService {
         this.repository = repository;
     }
 
-    public List<TarefaResponseDTO> listarTodas() {
-        return repository.findAll().stream()
-                .map(TarefaResponseDTO::new)
-                .toList();
+    public Page<TarefaResponseDTO> listarTodas(Pageable pageable) {
+        return repository.findAll(pageable)
+                .map(t -> new TarefaResponseDTO(
+                        t.getId(),
+                        t.getTitulo(),
+                        t.getDescricao(),
+                        t.isConcluida()
+                ));
     }
 
     public TarefaResponseDTO buscarPorId(Long id) {

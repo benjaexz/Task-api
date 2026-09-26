@@ -4,11 +4,11 @@ import com.example.task_api.dto.TarefaRequestDTO;
 import com.example.task_api.dto.TarefaResponseDTO;
 import com.example.task_api.service.TarefaService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/tarefas")
@@ -21,8 +21,8 @@ public class TarefaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TarefaResponseDTO>> listarTodas() {
-        return ResponseEntity.ok(service.listarTodas());
+    public ResponseEntity<Page<TarefaResponseDTO>> listar(Pageable pageable) {
+        return ResponseEntity.ok(service.listarTodas(pageable));
     }
 
     @GetMapping("/{id}")
@@ -47,4 +47,4 @@ public class TarefaController {
         service.deletar(id);
         return ResponseEntity.noContent().build();
     }
-}
+}   
